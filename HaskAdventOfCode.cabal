@@ -23,6 +23,8 @@ library
     , Stream
   default-extensions:
     NamedFieldPuns
+    , ScopedTypeVariables
+    , ViewPatterns
   ghc-options:
     -Wall
     -Widentities
