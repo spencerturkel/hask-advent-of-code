@@ -20,6 +20,8 @@ executable HaskAdventOfCode
   build-depends:       
     base >= 4.7 && < 5
     , Stream
+  extensions:
+    NamedFieldPuns
   ghc-options:
     -Wall
     -Widentities
