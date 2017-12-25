@@ -8,4 +8,4 @@
 !stack.yaml
 
 !src
-!src/**/*.hs
+!src/**/*
