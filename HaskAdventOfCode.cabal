@@ -21,10 +21,12 @@ library
   default-language:    Haskell2010
   build-depends:       
     base >= 4.7 && < 5
+    , comonad
     , recursion-schemes
     , Stream
   default-extensions:
     NamedFieldPuns
+    , DeriveFunctor
     , InstanceSigs
     , ScopedTypeVariables
     , TypeFamilies
@@ -40,3 +42,4 @@ library
     -Wredundant-constraints
     -Werror
     -Wcompat
+    -fno-warn-orphans
