@@ -1,0 +1,11 @@
+**/*
+
+!.gitignore
+!HaskAdventOfCode.cabal
+!LICENSE
+!README.md
+!Setup.hs
+!stack.yaml
+
+!src
+!src/**/*.hs
