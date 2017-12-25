@@ -1,12 +1,12 @@
-module Main where
+module Day3 where
 
 import qualified Data.Stream as S
 
-main :: IO ()
-main = do
+runPartOne :: IO ()
+runPartOne = do
   putStrLn "Calculating..."
   let point = (spiral :: S.Stream (Point Int)) S.!! (289326 - 1)
-  putStrLn $ "The point is " ++ show point
+  point `seq` (putStrLn $ "The point is " ++ show point)
   let distanceFromOrigin = abs (x point) + abs (y point)
   putStrLn $ "The distance from the origin is " ++ show distanceFromOrigin
 
