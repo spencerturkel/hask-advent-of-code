@@ -21,19 +21,12 @@ library
     , Day3PartTwo
     , Point
     , Spiral
-    , StreamRecursion
   default-language:    Haskell2010
   build-depends:       
     base >= 4.7 && < 5
-    , comonad
-    , hashable
-    , recursion-schemes
     , Stream
-    , unordered-containers
   default-extensions:
-    Arrows
-    , DeriveAnyClass
-    , DeriveFunctor
+    DeriveFunctor
     , DeriveGeneric
     , GeneralizedNewtypeDeriving
     , InstanceSigs
@@ -51,4 +44,3 @@ library
     -Wredundant-constraints
     -Werror
     -Wcompat
-    -fno-warn-orphans

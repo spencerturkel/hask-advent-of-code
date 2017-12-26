@@ -4,8 +4,7 @@ import Data.Stream (Stream, (!!))
 import Prelude hiding ((!!))
 
 import Spiral (spiral)
-import Point (Point(Point, x, y))
-import StreamRecursion ()
+import Point (Point(x, y))
 
 runPartOne :: IO ()
 runPartOne = do

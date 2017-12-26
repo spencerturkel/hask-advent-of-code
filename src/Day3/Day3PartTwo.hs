@@ -24,9 +24,11 @@ runDayThreePartTwo = do
 mappingFromList :: (Eq a) => [(a, b)] -> a -> Maybe b
 mappingFromList = flip lookup
 
-updateMapping ::
-     (Applicative f, Eq a) => a -> b -> (a -> f b) -> a -> f b
-updateMapping x y f a = if a == x then pure y else f a
+updateMapping :: (Applicative f, Eq a) => a -> b -> (a -> f b) -> a -> f b
+updateMapping x y f a =
+  if a == x
+    then pure y
+    else f a
 
 spiralSum ::
      forall a m. (Ord a, Num a, Monoid m, Num m, Ord m)
