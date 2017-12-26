@@ -19,11 +19,10 @@ library
   hs-source-dirs:
     src
     , src/Day3
-    , src/Day4
   exposed-modules:
     Day3PartOne
     , Day3PartTwo
-    , Day4PartOne
+    , Day4
     , Point
     , Spiral
   other-modules:
