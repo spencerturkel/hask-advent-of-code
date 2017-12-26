@@ -3,34 +3,46 @@ module Day3PartTwo where
 import Control.Comonad.Trans.Env (EnvT)
 import Data.Functor.Foldable (gpara, para)
 import Data.List (elemIndex)
-import Data.Maybe (maybe)
-import qualified Data.Stream as S (Stream, (!!), iterate)
+import Data.Maybe (fromMaybe)
+import Data.Monoid (Sum(Sum, getSum))
+import Data.Stream (Stream, filter, head, zip)
+import Prelude hiding ((!!), filter, head, Left, Right, zip)
 
-import Spiral (spiral)
 import Point (Point(Point, x, y))
+import qualified Spiral (spiral)
 import StreamRecursion ()
 
-spiralSum :: forall a. (Num a) => S.Stream a
-spiralSum = undefined
-  where
-    -- transform :: (a, (w b)) -> w (a, b)
-    -- transform = _
-    -- step :: (a, (EnvT (S.Stream a) w (S.Stream a))) -> S.Stream a
-    -- step = _
-    transform :: (a, (S.Stream a, b)) -> b
-    transform (current, (soFar, next)) = _
-    go :: S.Stream a -> S.Stream a
-    -- go = gpara transform step
-    go = para transform
+runDayThreePartTwo :: IO ()
+runDayThreePartTwo = do
+  putStrLn "Calculating..."
+  let spiral = spiralSum (Spiral.spiral :: Stream (Point Int))
+      result = find (\x -> x > 289326) . fmap getSum $ spiral
+      message = "The result is " ++ show result
+  message `seq` putStrLn message
 
-spiralSumStep ::
-     forall a. (Eq a, Num a)
-  => Point a
-  -> [Point a]
-  -> a
-spiralSumStep (Point {x, y}) ps =
-  sum $ map index [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+spiralSum ::
+     forall a m. (Eq a, Num a, Monoid m)
+  => Stream (Point a)
+  -> Stream m
+spiralSum spiral = para (f . fmap (uncurry zip)) spiral
   where
-    index :: (a, a) -> a
-    index (px, py) =
-      maybe 0 fromIntegral $ elemIndex (Point {x = px, y = py}) ps
+    f :: (Point a, Stream (Point a, m)) -> Stream m
+    f = _
+    sumAtPoint :: (Direction -> Point a -> m) -> Point a -> m
+    sumAtPoint adjacentSum = mconcat . fmap adjacentSum $ [Left, Right, Up, Down]
+    offsetPoint :: Direction -> Point a -> Point a
+    offsetPoint Left Point{x, y} = Point{x = x - 1, y}
+    offsetPoint Right Point{x, y} = Point{x = x + 1, y}
+    offsetPoint Up Point{x, y} = Point{x, y = y + 1}
+    offsetPoint Down Point{x, y} = Point{x, y = y - 1}
+    findPointValue :: Stream (Point a, b) -> Point a -> b
+    findPointValue ps p = snd $ find (\(q, _) -> q == p) ps
+
+find :: (a -> Bool) -> Stream a -> a
+find p = head . filter p
+
+data Direction
+  = Left
+  | Right
+  | Up
+  | Down
