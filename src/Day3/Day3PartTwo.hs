@@ -1,8 +1,9 @@
 module Day3PartTwo where
 
+import Data.Hashable (Hashable)
 import Data.List (zip)
-import Data.Map.Lazy (Map, (!), insert)
-import qualified Data.Map.Lazy as Map (fromList)
+import Data.HashMap.Lazy (HashMap, (!), insert)
+import qualified Data.HashMap.Lazy as HashMap (fromList)
 import Data.Monoid (Sum(Sum), (<>))
 import Data.Stream (Stream)
 import qualified Data.Stream as Stream (toList)
@@ -20,16 +21,16 @@ runDayThreePartTwo = do
   message `seq` putStrLn message
 
 spiralSum ::
-     forall a m. (Ord a, Num a, Monoid m, Ord m)
+     forall a m. (Hashable a, Ord a, Num a, Monoid m, Ord m)
   => Stream (Point a)
   -> m
   -> m
 spiralSum (Stream.toList -> spiral) =
-  let pointValues = Map.fromList . fmap (flip (,) mempty) $ spiral
-      nextPoint = (!) . Map.fromList $ zip spiral (tail spiral)
+  let pointValues = HashMap.fromList . fmap (flip (,) mempty) $ spiral
+      nextPoint = (!) . HashMap.fromList $ zip spiral (tail spiral)
   in go nextPoint pointValues (Point 0 0)
   where
-    go :: (Point a -> Point a) -> Map (Point a) m -> Point a -> m -> m
+    go :: (Point a -> Point a) -> HashMap (Point a) m -> Point a -> m -> m
     go nextPoint pointValues currentPoint valueToFind
       | valueToFind >= pointValues ! currentPoint = valueToFind
       | otherwise =
@@ -39,9 +40,9 @@ spiralSum (Stream.toList -> spiral) =
           (nextPoint currentPoint)
           valueToFind
       where
-        updatePointValues :: Point a -> Map (Point a) m -> Map (Point a) m
+        updatePointValues :: Point a -> HashMap (Point a) m -> HashMap (Point a) m
         updatePointValues p ps = insert p (calculatePointValue ps p) ps
-        calculatePointValue :: Map (Point a) m -> Point a -> m
+        calculatePointValue :: HashMap (Point a) m -> Point a -> m
         calculatePointValue ps (Point {x, y}) =
           let leftValue = ps ! (Point {x = x - 1, y})
               rightValue = ps ! Point {x = x + 1, y}

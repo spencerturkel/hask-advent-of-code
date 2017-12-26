@@ -26,12 +26,16 @@ library
   build-depends:       
     base >= 4.7 && < 5
     , comonad
-    , containers
+    , hashable
     , recursion-schemes
     , Stream
+    , unordered-containers
   default-extensions:
     Arrows
+    , DeriveAnyClass
     , DeriveFunctor
+    , DeriveGeneric
+    , GeneralizedNewtypeDeriving
     , InstanceSigs
     , NamedFieldPuns
     , ScopedTypeVariables
