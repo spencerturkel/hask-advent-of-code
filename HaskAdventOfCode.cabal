@@ -30,9 +30,10 @@ library
     , recursion-schemes
     , Stream
   default-extensions:
-    NamedFieldPuns
+    Arrows
     , DeriveFunctor
     , InstanceSigs
+    , NamedFieldPuns
     , ScopedTypeVariables
     , TypeFamilies
     , ViewPatterns
