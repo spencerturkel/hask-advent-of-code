@@ -1,22 +1,19 @@
 module Day3PartTwo where
 
-import Control.Comonad.Trans.Env (EnvT)
-import Data.Functor.Foldable (ana)
-import Data.List (elemIndex)
-import Data.Maybe (fromMaybe)
-import Data.Monoid (Sum(Sum, getSum))
-import Data.Stream (Stream, filter, head, repeat, zip)
+import Data.Foldable (find)
+import qualified Data.Map.Lazy as Map (Map, fromList, lookup)
+import Data.Monoid (Sum(getSum))
+import Data.Stream (Stream, filter, fromList, head, repeat, toList, zip)
 import Prelude hiding (Left, Right, (!!), filter, head, repeat, zip)
 
 import Point (Point(Point, x, y))
 import qualified Spiral (spiral)
-import StreamRecursion ()
 
 runDayThreePartTwo :: IO ()
 runDayThreePartTwo = do
   putStrLn "Calculating..."
   let spiral = spiralSum (Spiral.spiral :: Stream (Point Int))
-      result = find (\x -> x > 289326) . fmap getSum $ spiral
+      result = findS (\x -> x > 289326) . fmap getSum $ spiral
       message = "The result is " ++ show result
   message `seq` putStrLn message
 
@@ -25,13 +22,25 @@ spiralSum ::
   => Stream (Point a)
   -> Stream m
 spiralSum =
-  let getNext :: Stream (Point a, m) -> Point a -> m
-      getNext xs = sumAtPoint (fmap (findPointValue xs) . offsetPoint)
-
-  in fmap snd . go getNext (Point 0 0) . flip zip (repeat (mempty :: m))
+  let updatePoint :: Point a -> (Point a -> m) -> (Point a -> m -> b) -> b
+      updatePoint =
+        let getNext :: (Point a -> m) -> Point a -> m
+            getNext f = sumAtPoint (fmap f . offsetPoint)
+        in updatePointSum getNext
+      go :: Point a -> Stream (Point a, m) -> Stream (Point a, m)
+      go p xs =
+        let ps = Map.fromList $ toList xs
+        in _
+  in fmap snd . go (Point 0 0) . flip zip (repeat (mempty :: m))
   where
-    go :: (Stream (Point a, m) -> Point a -> m) -> Point a -> Stream (Point a, m) -> Stream (Point a, m)
-    go next p xs = _
+    updatePointSum ::
+         ((Point a -> m) -> Point a -> m)
+      -> Point a
+      -> (Point a -> m)
+      -> (Point a -> m -> b)
+      -> b
+    updatePointSum findNewPointSumGivenExistingSums p findPoint updatePointMap =
+      updatePointMap p . findNewPointSumGivenExistingSums findPoint $ p
     sumAtPoint :: (Direction -> Point a -> m) -> Point a -> m
     sumAtPoint adjacentSum =
       mconcat . fmap adjacentSum $ [Left, Right, Up, Down]
@@ -40,11 +49,9 @@ spiralSum =
     offsetPoint Right Point {x, y} = Point {x = x + 1, y}
     offsetPoint Up Point {x, y} = Point {x, y = y + 1}
     offsetPoint Down Point {x, y} = Point {x, y = y - 1}
-    findPointValue :: Stream (Point a, b) -> Point a -> b
-    findPointValue ps p = snd $ find (\(q, _) -> q == p) ps
 
-find :: (a -> Bool) -> Stream a -> a
-find p = head . filter p
+findS :: (a -> Bool) -> Stream a -> a
+findS p = head . filter p
 
 data Direction
   = Left
