@@ -1,11 +1,15 @@
 **/*
 
+!.ghci
 !.gitignore
 !HaskAdventOfCode.cabal
 !LICENSE
 !README.md
 !Setup.hs
 !stack.yaml
+
+!executables
+!executables/**/*
 
 !input
 !input/**/*
