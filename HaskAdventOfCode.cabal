@@ -35,12 +35,16 @@ library
     base >= 4.7 && < 5
     , containers
     , Stream >= 0.4.7 && < 0.5
+    , primitive
+    , vector
   default-extensions:
-    DeriveFunctor
+    ConstraintKinds
+    , DeriveFunctor
     , DeriveGeneric
     , GeneralizedNewtypeDeriving
     , InstanceSigs
     , NamedFieldPuns
+    , RankNTypes
     , ScopedTypeVariables
     , TypeFamilies
     , ViewPatterns
