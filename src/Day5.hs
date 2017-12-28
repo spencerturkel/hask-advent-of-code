@@ -4,7 +4,6 @@ import Control.Monad ((<=<), unless)
 import Control.Monad.ST (ST, runST)
 import Data.Vector.Unboxed (Vector, fromList, thaw)
 import qualified Data.Vector.Unboxed.Mutable as V
--- import Debug.Trace (trace)
 
 import Paths_HaskAdventOfCode (getDataFileName)
 
@@ -66,7 +65,6 @@ findStepsToExit OffsetAdjuster {_offsetAdjuster = adjuster} =
       go 0 0 (V.length mutProgram) mutProgram
     go :: Int -> a -> Int -> V.MVector s a -> ST s a
     go index resultSoFar programLength program
-      -- | trace ("index " ++ show index) False = undefined
       | index < 0 || index >= programLength = pure resultSoFar
       | otherwise = do
         nextIndex <- (\x -> fromIntegral x + index) <$> V.read program index

@@ -32,6 +32,7 @@ library
     , Day3PartTwo
     , Day4
     , Day5
+    , Day6
     , Point
     , Spiral
   other-modules:
