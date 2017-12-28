@@ -15,6 +15,14 @@ extra-source-files:  README.md
 data-files:
   input/*.txt
 
+executable RunDay6
+  hs-source-dirs: executables
+  main-is: RunDay6.hs
+  build-depends: 
+    base >= 4.7 && < 5
+    , HaskAdventOfCode
+  default-language: Haskell2010
+
 executable RunDay5PartTwo
   hs-source-dirs: executables
   main-is: RunDay5PartTwo.hs
