@@ -1,6 +1,6 @@
 module Main where
 
-import Day6 (runDay6)
+-- import Day6 (runDay6)
 
 main :: IO ()
-main = runDay6
+main = undefined

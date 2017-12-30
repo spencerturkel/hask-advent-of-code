@@ -1,60 +1,49 @@
-module Day6
-  ( runDay6
-  ) where
+module Day6 where
 
-import Control.Monad.ST (ST, stToIO)
+-- import Control.Monad.ST (ST, stToIO)
 import Data.Function (on)
-import Data.List (maximumBy)
-import Data.Monoid (Sum(Sum))
-import Data.Set (Set)
-import qualified Data.Set as Set
-import Data.Vector.Unboxed (Vector, freeze, fromList, thaw, toList)
-import Data.Vector.Unboxed.Mutable (MVector, Unbox, length, modify, read, write)
-import Prelude hiding (cycle, length, read)
 
-runDay6 :: IO ()
-runDay6 = do
-  putStrLn "Running test..."
-  testVec <-
-    thaw . fromList $ [0, 2, 7, 0 :: Int]
-  Sum testCount <- stToIO $ countRedistributionCycles testVec 2 (Sum (1 :: Int))
-  print testCount
-  _ <- getLine
-  putStrLn "Running Day 6..."
-  vec <-
-    thaw . fromList $ [2 :: Int, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14]
-  Sum count <- stToIO $ countRedistributionCycles vec 12 (Sum (1 :: Int))
-  print count
+-- import Data.Monoid (Sum(Sum))
+-- import Data.Set (Set)
+-- import qualified Data.Set as Set
+import Data.Vector.Unboxed (Unbox, Vector, foldl', indexed, length, modify)
+import qualified Data.Vector.Unboxed.Mutable as M (modify, write)
+import Prelude hiding (length)
 
-countRedistributionCycles ::
-     forall a b s. (Num a, Ord a, Unbox a, Monoid b)
-  => MVector s a
-  -> Int
-  -> b
-  -> ST s b
-countRedistributionCycles vec initialIndex cycle = do
-  initialVec <- freeze vec
-  mappend cycle <$> go initialIndex (Set.singleton initialVec)
+testInput :: [Int]
+testInput = [0, 2, 7, 0]
+
+actualInput :: [Int]
+actualInput = [2, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14]
+
+redistribute ::
+     forall a. (Num a, Ord a, Unbox a)
+  => Vector a
+  -> Vector a
+redistribute xs =
+  case leftMaximum (indexed xs) (compare `on` snd) of
+    Nothing -> xs
+    Just (index, value) ->
+      let zeroedAtIndex = modify (\v -> M.write v index 0) xs
+      in distribute zeroedAtIndex value ((index + 1) `mod` length zeroedAtIndex)
   where
-    len :: Int
-    len = length vec
-    go :: Int -> Set (Vector a) -> ST s b
-    go index seen = do
-      valueToDistribute <- read vec index
-      write vec index 0
-      distribute valueToDistribute ((index + 1) `mod` len)
-      frozen <- freeze vec
-      if Set.member frozen seen
-        then pure mempty
-        else fmap (mappend cycle) $ do
-               let nextIndex =
-                     fst . maximumBy (compare `on` snd) . zip [0 ..] $
-                     toList frozen
-                   nextSeen = Set.union seen $ Set.singleton frozen
-               go nextIndex nextSeen
-    distribute :: a -> Int -> ST s ()
-    distribute value startIndex
-      | value <= 0 = pure ()
-      | otherwise = do
-        modify vec (+ 1) startIndex
-        distribute (value - 1) ((startIndex + 1) `mod` len)
+    distribute vec 0 _ = vec
+    distribute vec val ix =
+      distribute
+        (modify (\v -> M.modify v (+ 1) ix) vec)
+        (val - 1)
+        ((ix + 1) `mod` length vec)
+
+leftMaximum ::
+     forall a. (Unbox a)
+  => Vector a
+  -> (a -> a -> Ordering)
+  -> Maybe a
+leftMaximum xs comp = foldl' acc Nothing xs
+  where
+    acc :: Maybe a -> a -> Maybe a
+    acc Nothing x = Just x
+    acc (Just y) x =
+      case comp y x of
+        LT -> Just x
+        _ -> Just y
