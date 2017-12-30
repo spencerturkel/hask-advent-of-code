@@ -14,6 +14,12 @@ import Prelude hiding (cycle, length, read)
 
 runDay6 :: IO ()
 runDay6 = do
+  putStrLn "Running test..."
+  testVec <-
+    thaw . fromList $ [0, 2, 7, 0 :: Int]
+  Sum testCount <- stToIO $ countRedistributionCycles testVec 2 (Sum (1 :: Int))
+  print testCount
+  _ <- getLine
   putStrLn "Running Day 6..."
   vec <-
     thaw . fromList $ [2 :: Int, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14]
@@ -28,7 +34,7 @@ countRedistributionCycles ::
   -> ST s b
 countRedistributionCycles vec initialIndex cycle = do
   initialVec <- freeze vec
-  go initialIndex (Set.singleton initialVec)
+  mappend cycle <$> go initialIndex (Set.singleton initialVec)
   where
     len :: Int
     len = length vec
@@ -50,5 +56,5 @@ countRedistributionCycles vec initialIndex cycle = do
     distribute value startIndex
       | value <= 0 = pure ()
       | otherwise = do
-        modify vec (+ value) startIndex
+        modify vec (+ 1) startIndex
         distribute (value - 1) ((startIndex + 1) `mod` len)
