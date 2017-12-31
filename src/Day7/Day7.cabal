@@ -15,10 +15,12 @@ library
   hs-source-dirs: .
   exposed-modules: 
     Parser
+    , ProgramInfo
   other-modules: Paths_Day7
   autogen-modules: Paths_Day7
   build-depends:       
     base >= 4.7 && < 5
+    , containers
   default-extensions:
     ConstraintKinds
     , DeriveFunctor
