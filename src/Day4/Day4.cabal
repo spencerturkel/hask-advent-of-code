@@ -1,19 +1,20 @@
-name:                Day3
+name:                Day4
 version:             0.1.0.0
 build-type:          Simple
 cabal-version:       >=1.10
+data-files:          input.txt
 
 library
   hs-source-dirs:
     .
   exposed-modules:
-    Day3PartOne
-    , Day3PartTwo
-    , Point
-    , Spiral
+    Day4
+  other-modules:
+    Paths_Day4
+  autogen-modules:
+    Paths_Day4
   build-depends:       
     base >= 4.7 && < 5
-    , Stream >= 0.4.7 && < 0.5
   default-extensions:
     ConstraintKinds
     , DeriveFunctor
