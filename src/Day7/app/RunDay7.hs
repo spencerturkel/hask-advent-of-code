@@ -10,7 +10,7 @@ import Paths_Day7 (getDataFileName)
 main :: IO ()
 main = do
     putStrLn "Running..."
-    print =<< (run <$> (readFile =<< getDataFileName "input.txt"))
+    putStrLn =<< (run <$> (readFile =<< getDataFileName "input.txt"))
 
 run :: String -> String
 run =

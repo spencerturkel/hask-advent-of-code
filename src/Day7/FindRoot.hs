@@ -1,5 +1,6 @@
 module FindRoot where
 
+import Control.Arrow (Arrow((&&&), first))
 import Data.Graph (graphFromEdges)
 import Data.List.NonEmpty (NonEmpty)
 import Data.List.NonEmpty as NonEmpty (toList)
@@ -12,11 +13,12 @@ findRootName :: NonEmpty ProgramInfo -> String
 findRootName =
   fst .
   fmap fromList .
-  (\f -> f 0) .
-  fmap (\((), z, a) -> (z, a)) .
-  (\(_, f, _) -> f) .
-  graphFromEdges .
-  NonEmpty.toList .
-  fmap
-    (\(ProgramInfo {_name, _childProgramNames}) ->
-       ((), _name, Set.toList _childProgramNames))
+  (\(f, len) -> f (len - 1)) .
+  first
+    ((fmap (\((), z, a) -> (z, a)) .
+      (\(_, f, _) -> f) .
+      graphFromEdges .
+      fmap
+        (\(ProgramInfo {_name, _childProgramNames}) ->
+           ((), _name, Set.toList _childProgramNames)))) .
+  (id &&& length) . NonEmpty.toList
