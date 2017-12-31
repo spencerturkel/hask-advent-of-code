@@ -5,7 +5,7 @@ import Control.Monad.ST (ST, runST)
 import Data.Vector.Unboxed (Vector, fromList, thaw)
 import qualified Data.Vector.Unboxed.Mutable as V
 
-import Paths_HaskAdventOfCode (getDataFileName)
+import Paths_Day5 (getDataFileName)
 
 runDay5PartOne :: IO ()
 runDay5PartOne = runDay5WithAdjuster adjustPartOne
@@ -33,7 +33,7 @@ runDay5 adjuster = do
   line <- getLine
   unless (line == "q") $ do
     putStrLn "Real input..."
-    printStepsToExit adjuster <=< readInput <=< getDataFileName $ "input/day5.txt"
+    printStepsToExit adjuster <=< readInput <=< getDataFileName $ "input.txt"
 
 readInput :: (Read a) => FilePath -> IO [Offset a]
 readInput path = fmap (Offset . read) . lines <$> readFile path

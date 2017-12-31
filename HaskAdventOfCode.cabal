@@ -12,8 +12,6 @@ category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
-data-files:
-  input/*.txt
 
 executable RunDay6
   hs-source-dirs: executables
@@ -35,8 +33,7 @@ library
   hs-source-dirs:
     src
   exposed-modules:
-    Day5
-    , Day6
+    Day6
   other-modules:
     Paths_HaskAdventOfCode
   autogen-modules:

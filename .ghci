@@ -1,2 +1,2 @@
 :set -w
-:set -isrc/ghci
+:set -i./ghci
