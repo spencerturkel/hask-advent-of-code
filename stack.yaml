@@ -1,6 +1,5 @@
 resolver: lts-10.0
 packages:
-- .
 - src/Day3
 - src/Day4
 - src/Day5
