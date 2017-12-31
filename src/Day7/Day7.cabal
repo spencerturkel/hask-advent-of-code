@@ -2,6 +2,7 @@ name:                Day7
 version:             0.1.0.0
 build-type:          Simple
 cabal-version:       >=1.10
+data-files:          input.txt
 
 executable RunDay7
   hs-source-dirs: app
@@ -14,7 +15,8 @@ executable RunDay7
 library
   hs-source-dirs: .
   exposed-modules: 
-    Parser
+    FindRoot
+    , Parser
     , ProgramInfo
   other-modules: Paths_Day7
   autogen-modules: Paths_Day7

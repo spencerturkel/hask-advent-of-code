@@ -1,7 +1,6 @@
 module Parser where
 
 import Control.Applicative (Alternative(some, (<|>)))
-import Control.Monad ((<=<))
 import Data.Char (isAlpha, isDigit)
 import Data.List (foldl')
 import Data.Set (Set, empty, fromList)
@@ -20,7 +19,7 @@ import Text.ParserCombinators.ReadP
 import ProgramInfo (ProgramInfo(ProgramInfo, _childProgramNames, _name))
 
 parseInput :: String -> Maybe ProgramInfo
-parseInput = toBestParse . allInputParses
+parseInput = toBestParse . readP_to_S pProgramInfo
 
 toBestParse :: forall a b. [(a, [b])] -> Maybe a
 toBestParse = fmap fst <$> foldl' acc Nothing
@@ -30,9 +29,6 @@ toBestParse = fmap fst <$> foldl' acc Nothing
       Just $ case compare xLen yLen of
         LT -> (x, xLen)
         _ -> (y, yLen)
-
-allInputParses :: String -> [(ProgramInfo, String)]
-allInputParses = (readP_to_S pProgramInfo) <=< lines
 
 pProgramInfo :: ReadP ProgramInfo
 pProgramInfo = do
