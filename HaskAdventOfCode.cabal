@@ -34,15 +34,10 @@ executable RunDay5PartTwo
 library
   hs-source-dirs:
     src
-    , src/Day3
   exposed-modules:
-    Day3PartOne
-    , Day3PartTwo
-    , Day4
+    Day4
     , Day5
     , Day6
-    , Point
-    , Spiral
   other-modules:
     Paths_HaskAdventOfCode
   autogen-modules:

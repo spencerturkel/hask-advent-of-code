@@ -28,15 +28,36 @@ uniqueDistributionCycles ::
      forall a. (Num a, Ord a, Unbox a)
   => Vector a
   -> Set (Vector a)
-uniqueDistributionCycles = foldEither acc Set.empty . iterate redistribute
-  where acc :: Vector a -> Set (Vector a) -> Either (Set (Vector a)) (Set (Vector a))
-        acc x xs = if Set.member x xs then Left xs else Right $ Set.union (Set.singleton x) xs
+uniqueDistributionCycles = snd . startOfDistributionCycles
+
+lengthOfDistributionCycles ::
+     forall a. (Num a, Ord a, Unbox a)
+  => [a]
+  -> Int
+lengthOfDistributionCycles =
+  Set.size . snd . startOfDistributionCycles . fst . startOfDistributionCycles . fromList
+
+startOfDistributionCycles ::
+     forall a. (Num a, Ord a, Unbox a)
+  => Vector a
+  -> (Vector a, Set (Vector a))
+startOfDistributionCycles = foldEither acc Set.empty . iterate redistribute
+  where
+    acc ::
+         Vector a
+      -> Set (Vector a)
+      -> Either (Vector a, Set (Vector a)) (Set (Vector a))
+    acc x xs =
+      if Set.member x xs
+        then Left (x, xs)
+        else Right $ Set.union (Set.singleton x) xs
 
 foldEither :: (a -> b -> Either c b) -> b -> [a] -> c
 foldEither _ _ [] = undefined
-foldEither f y (x:xs) = case f x y of
-  Left z -> z
-  Right y' -> foldEither f y' xs
+foldEither f y (x:xs) =
+  case f x y of
+    Left z -> z
+    Right y' -> foldEither f y' xs
 
 redistributeTestInput :: Bool
 redistributeTestInput =
