@@ -29,6 +29,7 @@ toBestParse = fmap fst <$> foldl' acc Nothing
       Just $ case compare xLen yLen of
         LT -> (x, xLen)
         _ -> (y, yLen)
+    acc _ _ = undefined
 
 pProgramInfo :: ReadP ProgramInfo
 pProgramInfo = do
@@ -39,7 +40,7 @@ pProgramInfo = do
   skipSpaces
   _childProgramNames <-
     option empty $ do
-      string "->"
+      _ <- string "->"
       skipSpaces
       pChildProgramNames
   pure $ ProgramInfo {_name, _childProgramNames}
