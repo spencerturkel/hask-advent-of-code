@@ -1,6 +1,8 @@
 module Main where
 
--- import Day6 (runDay6)
+import Day6 (countUniqueDistributionCycles, actualInput, testInput)
 
 main :: IO ()
-main = undefined
+main = do
+    print $ countUniqueDistributionCycles testInput
+    print $ countUniqueDistributionCycles actualInput

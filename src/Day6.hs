@@ -15,6 +15,9 @@ import Data.Vector.Unboxed
 import qualified Data.Vector.Unboxed.Mutable as M (modify, write)
 import Prelude hiding (length)
 
+countUniqueDistributionCycles :: (Num a, Ord a, Unbox a) => [a] -> Int
+countUniqueDistributionCycles = Set.size . uniqueDistributionCycles . fromList
+
 testInput :: [Int]
 testInput = [0, 2, 7, 0]
 
