@@ -35,7 +35,8 @@ lengthOfDistributionCycles ::
   => [a]
   -> Int
 lengthOfDistributionCycles =
-  Set.size . snd . startOfDistributionCycles . fst . startOfDistributionCycles . fromList
+  Set.size .
+  snd . startOfDistributionCycles . fst . startOfDistributionCycles . fromList
 
 startOfDistributionCycles ::
      forall a. (Num a, Ord a, Unbox a)
@@ -79,7 +80,8 @@ redistribute xs =
   case leftMaximum (indexed xs) (compare `on` snd) of
     Nothing -> xs
     Just (index, value) ->
-      let zeroedAtIndex = modify (\v -> M.write v index 0) xs
+      let zeroedAtIndex :: Vector a
+          zeroedAtIndex = modify (\v -> M.write v index 0) xs
       in distribute zeroedAtIndex value ((index + 1) `mod` length zeroedAtIndex)
   where
     distribute vec 0 _ = vec

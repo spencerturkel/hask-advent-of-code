@@ -36,10 +36,12 @@ spiralSum ::
   -> m
   -> m
 spiralSum (Stream.toList -> spiral) =
-  let pointValues =
+  let pointValues :: Point a -> m
+      pointValues =
         fmap fromJust .
         updateMapping (Point 0 0) 1 . mappingFromList . fmap (flip (,) mempty) $
         spiral
+      nextPoint :: Point a -> Point a
       nextPoint = fmap fromJust . mappingFromList $ zip spiral (tail spiral)
   in go nextPoint pointValues (Point {x = 1, y = 0}) 1
   where

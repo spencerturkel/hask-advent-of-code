@@ -18,7 +18,7 @@ executable RunDay6
   main-is: RunDay6.hs
   build-depends: 
     base >= 4.7 && < 5
-    , HaskAdventOfCode
+    , Day6
   default-language: Haskell2010
 
 executable RunDay5PartTwo
@@ -26,41 +26,5 @@ executable RunDay5PartTwo
   main-is: RunDay5PartTwo.hs
   build-depends: 
     base >= 4.7 && < 5
-    , HaskAdventOfCode
-  default-language: Haskell2010
-
-library
-  hs-source-dirs:
-    src
-  exposed-modules:
-    Day6
-  other-modules:
-    Paths_HaskAdventOfCode
-  autogen-modules:
-    Paths_HaskAdventOfCode
-  build-depends:       
-    base >= 4.7 && < 5
-    , containers
-    , Stream >= 0.4.7 && < 0.5
-    , vector
-  default-extensions:
-    ConstraintKinds
-    , DeriveFunctor
-    , DeriveGeneric
-    , GeneralizedNewtypeDeriving
-    , InstanceSigs
-    , NamedFieldPuns
-    , RankNTypes
-    , ScopedTypeVariables
-    , ViewPatterns
-  ghc-options:
-    -Wall
-    -Widentities
-    -Wincomplete-uni-patterns
-    -Wincomplete-record-updates
-    -Wmissing-home-modules
-    -Wmonomorphism-restriction
-    -Wredundant-constraints
-    -Werror
-    -Wcompat
+    , Day5
   default-language: Haskell2010

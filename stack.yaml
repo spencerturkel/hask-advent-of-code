@@ -4,5 +4,6 @@ packages:
 - src/Day3
 - src/Day4
 - src/Day5
+- src/Day6
 extra-deps:
 - haskell-src-exts-1.20.1
