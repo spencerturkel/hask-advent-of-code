@@ -1,14 +1,11 @@
 module FindRoot where
 
-import Control.Arrow (Arrow(first))
-import Data.Graph (topSort)
+import Data.Tree (rootLabel)
 import Data.List.NonEmpty (NonEmpty)
 
-import ProgramInfo (ProgramInfo)
-import ToGraph (programInfoToGraph)
+import ProgramInfo (ProgramInfo(_name))
+import ToTree (programInfoToTree)
 
-findRootName :: NonEmpty ProgramInfo -> String
+findRootName :: NonEmpty ProgramInfo -> Maybe String
 findRootName =
-  (\(_, x, _) -> x) .
-  (\((v, f)) -> f v) .
-  first (head . topSort) . (\(g, f, _) -> (g, f)) . programInfoToGraph
+  fmap (_name . rootLabel) . programInfoToTree

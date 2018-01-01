@@ -1,20 +1,17 @@
 module Main where
 
-import Data.Maybe (mapMaybe)
 import Data.List.NonEmpty (NonEmpty((:|)))
 
 import FindRoot (findRootName)
-import Parser (parseInput)
+import Parser (parseLinesNonEmpty)
 import Paths_Day7 (getDataFileName)
 
 main :: IO ()
 main = do
     putStrLn "Running..."
-    putStrLn =<< (run <$> (readFile =<< getDataFileName "input.txt"))
+    print =<< (run <$> (readFile =<< getDataFileName "input.txt"))
 
-run :: String -> String
+run :: String -> Maybe String
 run =
     findRootName .
-    (\(x:xs) -> x :| xs) .
-    mapMaybe parseInput .
-    lines
+    parseLinesNonEmpty

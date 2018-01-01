@@ -1,10 +1,9 @@
 module Main where
 
 import Data.List.NonEmpty (NonEmpty((:|)))
-import Data.Maybe (mapMaybe)
 
 import FindBalancingWeight (findBalancingWeight)
-import Parser (parseInput)
+import Parser (parseLinesNonEmpty)
 import Paths_Day7 (getDataFileName)
 import ProgramInfo (ProgramInfo)
 
@@ -18,7 +17,4 @@ main = do
   putStrLn =<< (run <$> (readFile =<< getDataFileName "input.txt"))
 
 run :: String -> String
-run = show . findBalancingWeight . parse
-
-parse :: String -> NonEmpty ProgramInfo
-parse = (\(x:xs) -> x :| xs) . mapMaybe parseInput . lines
+run = show . fmap findBalancingWeight . parseLinesNonEmpty

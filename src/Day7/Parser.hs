@@ -3,6 +3,8 @@ module Parser where
 import Control.Applicative (Alternative((<|>), many, some))
 import Data.Char (isAlpha, isDigit)
 import Data.List (foldl')
+import Data.List.NonEmpty (NonEmpty((:|)))
+import Data.Maybe (mapMaybe)
 import Data.Set (Set, empty, fromList)
 import Text.ParserCombinators.ReadP
   ( ReadP
@@ -18,6 +20,14 @@ import Text.ParserCombinators.ReadP
 import ProgramInfo
   ( ProgramInfo(ProgramInfo, _childProgramNames, _name, _weight)
   )
+
+parseLinesNonEmpty :: String -> Maybe (NonEmpty ProgramInfo)
+parseLinesNonEmpty = (\case
+  x:xs -> Just (x :| xs)
+  [] -> Nothing) . parseLines
+
+parseLines :: String -> [ProgramInfo]
+parseLines = mapMaybe parseInput . lines
 
 parseInput :: String -> Maybe ProgramInfo
 parseInput = toBestParse . readP_to_S pProgramInfo

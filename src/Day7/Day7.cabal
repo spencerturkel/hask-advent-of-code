@@ -31,7 +31,7 @@ library
     , FindRoot
     , Parser
     , ProgramInfo
-    , ToGraph
+    , ToTree
   build-depends:       
     base >= 4.7 && < 5
     , containers
@@ -40,6 +40,7 @@ library
     , DeriveFunctor
     , DeriveGeneric
     , GeneralizedNewtypeDeriving
+    , LambdaCase
     , InstanceSigs
     , NamedFieldPuns
     , RankNTypes
