@@ -3,7 +3,7 @@ module FindBalancingWeight where
 import Control.Monad ((<=<))
 import Data.Either (lefts, rights)
 import Data.Function (on)
-import Data.List (group, maximumBy, nub, sort)
+import Data.List (group, minimumBy, nub, sort)
 import Data.Tree (Tree, foldTree)
 
 import ProgramInfo (ProgramInfo(_weight))
@@ -18,7 +18,8 @@ balancingWeightFromWeightedTree = either Just (const Nothing) . foldTree acc
   where
     acc :: Int -> [Either Int Int] -> Either Int Int
     acc _ (lefts -> x:_) = Left x
-    acc weight (nub . rights -> _:[]) = Right weight
-    acc weight (rights -> []) = Right weight
-    acc _ (rights -> xs) =
-      Left . head . maximumBy (compare `on` length) . group . sort $ xs
+    acc weight (rights -> xs)
+      | length (nub xs) == 1 = Right $ weight + sum xs
+      | xs == [] = Right weight
+      | otherwise =
+        Left . head . minimumBy (compare `on` length) . group . sort $ xs
