@@ -1,7 +1,7 @@
 module Parser where
 
 import Control.Applicative (Alternative((<|>), many))
-import Text.Regex.Applicative (RE, psym, string, sym)
+import Text.Regex.Applicative (RE, match, psym, string, sym)
 
 import Instruction
   ( Comparison(Equal, GreaterThan, GreaterThanOrEqual, LessThan,
@@ -9,6 +9,9 @@ import Instruction
   , Instruction(Instruction)
   , Operation(Decrement, Increment)
   )
+
+parseProgram :: String -> Maybe [Instruction]
+parseProgram = traverse (match parseInstruction) . lines
 
 parseInstruction :: RE Char Instruction
 parseInstruction =
