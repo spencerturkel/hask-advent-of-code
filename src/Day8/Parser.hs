@@ -1,4 +1,7 @@
-module Parser where
+module Parser
+  ( parseProgram
+  , parseInstruction
+  ) where
 
 import Control.Applicative (Alternative((<|>), many))
 import Text.Regex.Applicative (RE, match, psym, string, sym)
@@ -11,11 +14,15 @@ import Instruction
   )
 
 parseProgram :: String -> Maybe [Instruction]
-parseProgram = traverse (match parseInstruction) . lines
+parseProgram = traverse parseInstruction . lines
 
-parseInstruction :: RE Char Instruction
-parseInstruction =
-  Instruction <$> pTarget <* space <*> pOperation <* space <*> pOperand <* space <*>
+parseInstruction :: String -> Maybe Instruction
+parseInstruction = match pInstruction
+
+pInstruction :: RE Char Instruction
+pInstruction =
+  Instruction <$> pTarget <* space <*> pOperation <* space <*> pOperand <*
+  string " if " <*>
   pSource <*
   space <*>
   pComparison <*
@@ -23,13 +30,13 @@ parseInstruction =
   pComparator
 
 pTarget :: RE Char String
-pTarget = many nonSpace
+pTarget = word
 
 pOperation :: RE Char Operation
 pOperation = (Increment <$ string "inc") <|> (Decrement <$ string "dec")
 
 pOperand :: RE Char Int
-pOperand = digit
+pOperand = numbers
 
 pSource :: RE Char String
 pSource = word
@@ -43,10 +50,13 @@ pComparison =
   (GreaterThanOrEqual <$ string ">=")
 
 pComparator :: RE Char Int
-pComparator = digit
+pComparator = numbers
 
-digit :: RE Char Int
-digit = read <$> many (psym (`elem` ['0','1' .. '9']))
+numbers :: RE Char Int
+numbers = read <$> (((:) <$> sym '-' <*> digits) <|> digits)
+
+digits :: RE Char String
+digits = many (psym (`elem` ['0','1' .. '9']))
 
 word :: RE Char String
 word = many nonSpace
