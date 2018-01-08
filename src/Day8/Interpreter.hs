@@ -1,6 +1,7 @@
-module Interpreter where
+module Interpreter (runProgram, runInstruction) where
 
-import Data.Map.Lazy (Map, alter, findWithDefault)
+import Data.List (scanl')
+import Data.Map.Lazy (Map, alter, empty, findWithDefault)
 import Data.Maybe (fromMaybe)
 
 import Instruction
@@ -10,6 +11,9 @@ import Instruction
             _operation, _source, _target)
   , Operation(Decrement, Increment)
   )
+
+runProgram :: [Instruction] -> [Map String Int]
+runProgram = scanl' (flip runInstruction) empty
 
 runInstruction :: Instruction -> Map String Int -> Map String Int
 runInstruction Instruction { _target
@@ -28,7 +32,7 @@ runInstruction Instruction { _target
 
 runOperation :: Num a => Operation -> a -> a -> a
 runOperation Increment = (+)
-runOperation Decrement = subtract
+runOperation Decrement = flip subtract
 
 runComparison :: Ord a => Comparison -> a -> a -> Bool
 runComparison LessThan = (<)
