@@ -5,14 +5,18 @@ import Text.ParserCombinators.ReadP
   ( ReadP
   , char
   , get
-  , manyTill
   , readP_to_S
   , sepBy
   )
 
+import Paths_Day9 (getDataFileName)
+
 main :: IO ()
 main = do
-  putStrLn "Hello world"
+  putStrLn "Running..."
+  input <- readFile =<< getDataFileName "input.txt"
+  putStrLn "Read input, solving..."
+  print . solve $ input
 
 solve :: String -> Int
 solve =
@@ -25,8 +29,17 @@ solve =
 pGroup :: Int -> ReadP Int
 pGroup n =
   char '{' *>
-  ((+ n) . sum <$> ((pGroup (n + 1) <|> (0 <$ pGarbage)) `sepBy` char ',') <|> pure n) <*
+  ((+ n) . sum <$> ((pGroup (n + 1) <|> (0 <$ pGarbage)) `sepBy` char ',') <|>
+   pure n) <*
   char '}'
 
 pGarbage :: ReadP ()
-pGarbage = char '<' *> get `manyTill` char '>' *> pure ()
+pGarbage = char '<' *> pInnerGarbage
+
+pInnerGarbage :: ReadP ()
+pInnerGarbage = do
+  c <- get
+  case c of
+    '!' -> get *> pInnerGarbage
+    '>' -> pure ()
+    _ -> pInnerGarbage
