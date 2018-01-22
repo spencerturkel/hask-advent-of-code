@@ -1,0 +1,41 @@
+name:                Day10
+version:             0.1.0.0
+build-type:          Simple
+cabal-version:       >=1.10
+data-files:          input.txt
+
+executable RunDay10PartOne
+  hs-source-dirs: app
+  build-depends:       
+    base >= 4.7 && < 5
+    , Day10
+  main-is: RunDay10PartOne.hs
+  ghc-options:
+    -Wall
+    -Widentities
+    -Wincomplete-uni-patterns
+    -Wincomplete-record-updates
+    -Wmissing-home-modules
+    -Wmonomorphism-restriction
+    -Wredundant-constraints
+    -Werror
+    -Wcompat
+  other-modules: Paths_Day10
+  autogen-modules: Paths_Day10
+  default-language: Haskell2010
+
+library
+  hs-source-dirs: .
+  build-depends:       
+    base >= 4.7 && < 5
+  ghc-options:
+    -Wall
+    -Widentities
+    -Wincomplete-uni-patterns
+    -Wincomplete-record-updates
+    -Wmissing-home-modules
+    -Wmonomorphism-restriction
+    -Wredundant-constraints
+    -Werror
+    -Wcompat
+  default-language: Haskell2010

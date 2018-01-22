@@ -1,6 +1,7 @@
 module Main where
 
 import Control.Applicative (Alternative((<|>)), Applicative(pure))
+import Debug.Trace
 import Text.ParserCombinators.ReadP
   ( ReadP
   , char
@@ -27,11 +28,13 @@ solve =
   readP_to_S (pGroup 1)
 
 pGroup :: Int -> ReadP Int
-pGroup n =
-  char '{' *>
-  ((+ n) . sum <$> ((pGroup (n + 1) <|> (0 <$ pGarbage)) `sepBy` char ',') <|>
-   pure n) <*
-  char '}'
+pGroup n
+  | flip trace False $ "pGroup " ++ show n = undefined
+  | otherwise =
+    char '{' *>
+    ((+ n) . sum <$> ((pGroup (n + 1) <|> (0 <$ pGarbage)) `sepBy` char ',') <|>
+    pure n) <*
+    char '}'
 
 pGarbage :: ReadP ()
 pGarbage = char '<' *> pInnerGarbage
